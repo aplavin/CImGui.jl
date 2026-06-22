@@ -28,12 +28,12 @@ end
 
 const g_ImageTexture = Dict{Int, GL.GLuint}()
 
-function ig._create_image_texture(::Val{:GlfwOpenGL3}, image_width, image_height; format=GL.GL_RGBA, type=GL.GL_UNSIGNED_BYTE)
+function ig._create_image_texture(::Val{:GlfwOpenGL3}, image_width, image_height; format=GL.GL_RGBA, type=GL.GL_UNSIGNED_BYTE, filter=GL.GL_LINEAR)
     id = GL.GLuint(0)
     @c GL.glGenTextures(1, &id)
     GL.glBindTexture(GL.GL_TEXTURE_2D, id)
-    GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR)
-    GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR)
+    GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, filter)
+    GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, filter)
     GL.glPixelStorei(GL.GL_UNPACK_ROW_LENGTH, 0)
     GL.glTexImage2D(GL.GL_TEXTURE_2D, 0, format, GL.GLsizei(image_width), GL.GLsizei(image_height), 0, format, type, C_NULL)
     g_ImageTexture[id] = id
